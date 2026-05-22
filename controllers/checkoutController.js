@@ -40,14 +40,16 @@ const checkoutController = {
         email:     req.body.email,     address:   req.body.address,
         city:      req.body.city,      province:  req.body.province,
         zip:       req.body.zip || '', phone:     req.body.phone,
-        total:     cart.totalPrice,    status:    'pending'
+        total:     cart.totalPrice,    status:    'pending',
+        user_id:   req.session.userId || null   // null si el usuario no está autenticado
       });
       for (const item of cart.items) {
         await OrderItem.create({
           OrderId:   order.id,
           ProductId: item.product.id,
           quantity:  item.quantity,
-          price:     item.product.price
+          price:     item.product.price,
+          store_id:   item.product.store_id || null,
         });
       }
       req.session.pendingOrderId = order.id;
