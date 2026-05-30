@@ -1,4 +1,3 @@
-// controllers/paypalController.js  (1/2) — Vista y cálculo
 const { Store, OrderItem, Order } = require('../models');
 const { Op } = require('sequelize');
 
@@ -26,7 +25,7 @@ const showPayout = async (req, res) => {
     error:   null
   });
 };
-// controllers/paypalController.js  (2/2) — Procesar payout
+
 const { sendPayout } = require('../services/paypalService');
 
 // POST /store-admin/payout

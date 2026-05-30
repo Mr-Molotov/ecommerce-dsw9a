@@ -12,14 +12,14 @@ const productRoutes  = require('./routes/products');
 const cartRoutes     = require('./routes/cart');
 const checkoutRoutes = require('./routes/checkout');
 
-const app  = express();
-const port = process.env.PORT || 3000;
-
 const storeAuthRoutes = require('./routes/storeAuth');
 const { attachLocals } = require('./middleware/authMiddleware');
 const userAuthRoutes = require('./routes/userAuth');
 const storeAdminRoutes = require('./routes/storeAdmin');
 const customerRoutes = require('./routes/customer');
+
+const app  = express();
+const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -36,8 +36,11 @@ app.use(session({
   saveUninitialized: false,
   cookie: { maxAge: 3600000 }
 }));
-
 app.use(attachLocals);
+app.use('/user', userAuthRoutes);
+app.use('/store-admin', storeAdminRoutes);
+app.use('/customer', customerRoutes);
+
 // Middleware: carrito vacio en sesion si no existe
 app.use((req, res, next) => {
   if (!req.session.cart) {
@@ -46,25 +49,18 @@ app.use((req, res, next) => {
   res.locals.cartItemCount = req.session.cart.totalQty || 0;
   next();
 });
-
-
-/*app.get('/', (req, res) => {
-  //res.send(`
-    //Hello World - [REEMPLAZAR POR SU NOMBRE]
-    //La aplicacion funciona en Render.
-    //Puerto: ${port} | Entorno: ${process.env.NODE_ENV || 'development'}
+/*
+app.get('/', (req, res) => {
+  res.send(`
+    Hello World - ALDAIR ARCHIBOLD
+    La aplicacion funciona en Render.
+    Puerto: ${port} | Entorno: ${process.env.NODE_ENV || 'development'}
   `);
-});
-*/
-
+});*/
 app.use('/',         productRoutes);
 app.use('/cart',     cartRoutes);
 app.use('/checkout', checkoutRoutes);
 app.use('/store', storeAuthRoutes);
-
-app.use('/user', userAuthRoutes);
-app.use('/store-admin', storeAdminRoutes);
-app.use('/customer', customerRoutes);
 
 app.use(['/store/login', '/store/register',
          '/user/login',  '/user/register',
