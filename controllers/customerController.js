@@ -1,4 +1,3 @@
-// controllers/customerController.js  (1/2) — Dashboard y órdenes
 const { User, Order, OrderItem, Product, Store, Wishlist } = require('../models');
 
 // GET /customer/dashboard
@@ -47,6 +46,7 @@ const orderDetail = async (req, res) => {
   if (!order) return res.redirect('/customer/orders');
   res.render('customer/order-detail', { layout: false, user, order });
 };
+
 const wishlist = async (req, res) => {
   const items = await Wishlist.findAll({
     where: { user_id: req.session.userId },

@@ -30,6 +30,7 @@ const listProducts = async (req, res) => {
   });
   res.render('store-admin/products', { layout: false, products });
 };
+
 const showNewProduct = (req, res) =>
   res.render('store-admin/product-form', { layout: false, product: null, error: null });
 
@@ -70,6 +71,7 @@ const deleteProduct = async (req, res) => {
   });
   res.redirect('/store-admin/products');
 };
+
 const { sequelize } = require('../config/database');
 
 // GET /store-admin/orders

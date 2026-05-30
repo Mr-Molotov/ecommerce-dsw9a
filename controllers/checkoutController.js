@@ -1,3 +1,4 @@
+// controllers/checkoutController.js
 const { Order, OrderItem } = require('../models');
 
 // ── Base URL de la API de PayPal ─────────────────────────────────
@@ -40,7 +41,7 @@ const checkoutController = {
   city:      req.body.city,      province:  req.body.province,
   zip:       req.body.zip || '', phone:     req.body.phone,
   total:     cart.totalPrice,    status:    'pending',
-  user_id:   req.session.userId || null
+  user_id:   req.session.userId || null   // null si el usuario no está autenticado
 });
      for (const item of cart.items) {
   await OrderItem.create({
@@ -86,8 +87,8 @@ const checkoutController = {
       res.status(500).json({ error: 'Error al crear orden PayPal' });
     }
   },
-
-    capturePayPalOrder: async (req, res) => {
+  // 3. El JS de payment.ejs llama aquí cuando el usuario aprueba en PayPal
+  capturePayPalOrder: async (req, res) => {
     try {
       const { paypalOrderId, orderId } = req.body;
       const accessToken = await getPayPalAccessToken();
